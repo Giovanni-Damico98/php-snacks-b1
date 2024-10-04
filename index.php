@@ -2,7 +2,29 @@
   nella documentazione) che name sia più lungo di 3 caratteri, che mail contenga un punto e una chiocciola e che age sia 
   un numero. Se tutto è ok stampare "Accesso riuscito", altrimenti "Accesso negato" -->
 <?php
+$nameIsOk = false;
+$emailIsOk = false;
+$ageIsOk = false;
+// Prendo i dati inseriti
+$nome = trim($_GET['nome']);
+$email = trim($_GET['email']);
+$age = trim($_GET['eta']);
+// Verifico che abbia almeno 4 caratteri
+if (strlen($nome) > 3) {
+    $nameIsOk = true;
+} else {
+    $nameIsOk = false;
+// Email
+}
+if (strpos($email, '@') !== false && strpos($email, '.') !== false) {
+    $emailIsOk = true;
+} else {
+    $emailIsOk = false;
+}
+// Età
+if ()
 
+if 
 ?>
 
 <!DOCTYPE html>
@@ -14,7 +36,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1pFkwJp4ornC0w" crossorigin="anonymous">
 </head>
 <body>
-<form>
+<form method="GET" action="">
             <!-- Campo Nome -->
             <div class="mb-3">
                 <label for="nome" class="form-label">Nome</label>
@@ -34,7 +56,7 @@
             </div>
 
             <!-- Bottone per inviare il form -->
-            <button type="submit" class="btn btn-primary">Invia</button>
+            <button type="submit" class="btn btn-primary" name="invia">Invia</button>
         </form>
 </body>
 </html>
