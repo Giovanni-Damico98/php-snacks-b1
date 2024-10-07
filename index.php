@@ -238,6 +238,20 @@ $classi = [
         ],
     ],
 ];
+
+// $classiConSufficenza = [];
+
+// foreach ($classi as $nomeClasse => $studenti) {
+//     echo $nomeClasse;
+//     echo ':  <br>';
+//     foreach ($studenti as $studente) {
+//         if ($studente['voto_medio'] >= 6) {
+//             echo $studente['voto_medio'];
+//             echo '<br>';
+//         }
+//     }
+//     echo '<br>';
+// }
 ?>
 
 <!DOCTYPE html>
@@ -271,9 +285,11 @@ $classi = [
             <!-- Corpo della tabella -->
             <tbody>
                 <!-- Per ogni classe nell'array classi eseguo un ciclo che mi permetta di vedere ogni classe -->
-                <?php foreach ($classi as $classe) { ?>
+                <?php foreach ($classi as $nomeClasse => $studenti) { ?>
+                    <td><?php
+                        echo $nomeClasse; ?></td>
                     <!-- Per ogni classe eseguo un ciclo che mi permetta di vedere ogni studente con i relativi campi -->
-                    <?php foreach ($classe as $studente) { ?>
+                    <?php foreach ($studenti as $studente) { ?>
                         <!-- Table row -->
                         <tr>
                             <!-- Table Data + codice php per mostrare in pagina i campi -->
