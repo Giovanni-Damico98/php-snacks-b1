@@ -1,6 +1,5 @@
 <?php
-$apiKey = 'LwhKikJGS81UomSswFdVDzBA7hd9C4YHukP3FBpC1r4';
-$url = 'https://api.unsplash.com/';
+
 $classi = [
     "Classe 1A" => [
         [
@@ -239,19 +238,32 @@ $classi = [
     ],
 ];
 
-// $classiConSufficenza = [];
-
+// $classiVotoSufficente = [];
 // foreach ($classi as $nomeClasse => $studenti) {
+//     array_push($classiVotoSufficente, $nomeClasse);
 //     echo $nomeClasse;
 //     echo ':  <br>';
 //     foreach ($studenti as $studente) {
 //         if ($studente['voto_medio'] >= 6) {
 //             echo $studente['voto_medio'];
 //             echo '<br>';
+//             array_push($classiVotoSufficente, $studente['voto_medio']);
 //         }
 //     }
 //     echo '<br>';
 // }
+
+
+// Prendo il valore inserito dall'utente nell'input e lo assegno alla variabile $valoreFiltro
+$valoreFiltro = $_POST['ottieniVoti'];
+
+if (is_numeric($valoreFiltro) && $valoreFiltro < 11 && $valoreFiltro > 0) {
+    $valoreFiltro = isset($valoreFiltro) ? ($valoreFiltro) : '0';
+} else {
+    echo '<p class="text-danger fw-bold text-center">E\' possibile inserire soltanto un valore numerico da 1 a 10</p>';
+    $valoreFiltro = '0';
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -268,6 +280,11 @@ $classi = [
 
 <body>
     <div class="container">
+        <form method="post" action="">
+            <label for="ottieniVoti">Filtra per voto medio:</label>
+            <input type="text" placeholder="Inserisci un numero" name="ottieniVoti">
+            <button type="submit">Cerca</button>
+        </form>
 
         <table class="table table-striped">
             <!-- Voci della tabella -->
@@ -290,24 +307,27 @@ $classi = [
                         echo $nomeClasse; ?></td>
                     <!-- Per ogni classe eseguo un ciclo che mi permetta di vedere ogni studente con i relativi campi -->
                     <?php foreach ($studenti as $studente) { ?>
-                        <!-- Table row -->
-                        <tr>
-                            <!-- Table Data + codice php per mostrare in pagina i campi -->
-                            <td><?php
-                                echo $studente['id']; ?></td>
-                            <td><?php
-                                echo $studente['nome']; ?></td>
-                            <td><?php
-                                echo $studente['cognome']; ?></td>
-                            <td><?php
-                                echo $studente['anni']; ?></td>
-                            <td><?php
-                                echo $studente['voto_medio']; ?></td>
-                            <td><?php
-                                echo $studente['linguaggio_preferito']; ?></td>
-                            <td><img url="<?php
-                                            echo $studente['immagine']; ?>" alt=""></td>
-                        </tr>
+
+                        <?php if ($studente['voto_medio'] >= $valoreFiltro) { ?>
+
+                            <tr>
+                                <!-- Table Data + codice php per mostrare in pagina i campi -->
+                                <td><?php
+                                    echo $studente['id']; ?></td>
+                                <td><?php
+                                    echo $studente['nome']; ?></td>
+                                <td><?php
+                                    echo $studente['cognome']; ?></td>
+                                <td><?php
+                                    echo $studente['anni']; ?></td>
+                                <td><?php
+                                    echo $studente['voto_medio']; ?></td>
+                                <td><?php
+                                    echo $studente['linguaggio_preferito']; ?></td>
+                                <td><img url="<?php
+                                                echo $studente['immagine']; ?>" alt=""></td>
+                            </tr>
+                        <?php } ?>
                     <?php } ?>
                 <?php } ?>
             </tbody>
