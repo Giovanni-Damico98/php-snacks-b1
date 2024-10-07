@@ -238,30 +238,22 @@ $classi = [
     ],
 ];
 
-// $classiVotoSufficente = [];
-// foreach ($classi as $nomeClasse => $studenti) {
-//     array_push($classiVotoSufficente, $nomeClasse);
-//     echo $nomeClasse;
-//     echo ':  <br>';
-//     foreach ($studenti as $studente) {
-//         if ($studente['voto_medio'] >= 6) {
-//             echo $studente['voto_medio'];
-//             echo '<br>';
-//             array_push($classiVotoSufficente, $studente['voto_medio']);
-//         }
-//     }
-//     echo '<br>';
-// }
-
-
 // Prendo il valore inserito dall'utente nell'input e lo assegno alla variabile $valoreFiltro
-$valoreFiltro = $_POST['ottieniVoti'];
-
-if (is_numeric($valoreFiltro) && $valoreFiltro < 11 && $valoreFiltro > 0) {
-    $valoreFiltro = isset($valoreFiltro) ? ($valoreFiltro) : '0';
+$valoreFiltroVoto = isset($_GET['ottieniVoti']) ? $_GET['ottieniVoti'] : '0';
+if (is_numeric($valoreFiltroVoto) && $valoreFiltroVoto <= 10 && $valoreFiltroVoto > 0) {
+    $valoreFiltroVoto = $valoreFiltroVoto;
 } else {
-    echo '<p class="text-danger fw-bold text-center">E\' possibile inserire soltanto un valore numerico da 1 a 10</p>';
-    $valoreFiltro = '0';
+    echo '<p class="text-danger fw-bold text-center">È possibile inserire un valore numerico da 1 a 10</p>';
+    $valoreFiltroVoto = '0';
+}
+
+// Filtro per linguaggio preferito
+$valoreFiltroLinguaggio = isset($_GET['ottieniLinguaggioPreferito']) ? $_GET['ottieniLinguaggioPreferito'] : '';
+$valoreFiltroLinguaggio = trim($valoreFiltroLinguaggio);
+
+if ($valoreFiltroLinguaggio === '' || is_numeric($valoreFiltroLinguaggio)) {
+    echo '<p class="text-danger fw-bold text-center">È possibile inserire soltanto una stringa</p>';
+    $valoreFiltroLinguaggio = '';
 }
 
 ?>
@@ -279,12 +271,15 @@ if (is_numeric($valoreFiltro) && $valoreFiltro < 11 && $valoreFiltro > 0) {
 </head>
 
 <body>
-    <div class="container">
-        <form method="post" action="">
+    <div class="container d-flex justify-content-center align-items-center flex-column">
+        <form method="get" action="" class="d-flex flex-column w-25">
             <label for="ottieniVoti">Filtra per voto medio:</label>
             <input type="text" placeholder="Inserisci un numero" name="ottieniVoti">
-            <button type="submit">Cerca</button>
+            <label for="ottieniLinguaggioPreferito">Filtra per linguaggio preferito:</label>
+            <input type="text" placeholder="Inserisci linguaggio" name="ottieniLinguaggioPreferito">
+            <button type="submit" name="filtraLinguaggio">Cerca</button>
         </form>
+
 
         <table class="table table-striped">
             <!-- Voci della tabella -->
@@ -303,13 +298,20 @@ if (is_numeric($valoreFiltro) && $valoreFiltro < 11 && $valoreFiltro > 0) {
             <tbody>
                 <!-- Per ogni classe nell'array classi eseguo un ciclo che mi permetta di vedere ogni classe -->
                 <?php foreach ($classi as $nomeClasse => $studenti) { ?>
-                    <td><?php
-                        echo $nomeClasse; ?></td>
+                    <tr>
+                        <td>
+                            <?php
+                            echo $nomeClasse; ?>
+                        </td>
+                    </tr>
                     <!-- Per ogni classe eseguo un ciclo che mi permetta di vedere ogni studente con i relativi campi -->
                     <?php foreach ($studenti as $studente) { ?>
 
-                        <?php if ($studente['voto_medio'] >= $valoreFiltro) { ?>
-
+                        <!-- Condizione aggiornata: Filtra sia per voto medio che per linguaggio preferito -->
+                        <?php if (
+                            $studente['voto_medio'] >= $valoreFiltroVoto &&
+                            (empty($valoreFiltroLinguaggio) || strcasecmp($studente['linguaggio_preferito'], $valoreFiltroLinguaggio) == 0)
+                        ) { ?>
                             <tr>
                                 <!-- Table Data + codice php per mostrare in pagina i campi -->
                                 <td><?php
@@ -324,13 +326,12 @@ if (is_numeric($valoreFiltro) && $valoreFiltro < 11 && $valoreFiltro > 0) {
                                     echo $studente['voto_medio']; ?></td>
                                 <td><?php
                                     echo $studente['linguaggio_preferito']; ?></td>
-                                <td><img url="<?php
-                                                echo $studente['immagine']; ?>" alt=""></td>
+                                <td><img src="<?php echo $studente['immagine']; ?>" alt="Immagine studente"></td>
                             </tr>
                         <?php } ?>
+
                     <?php } ?>
                 <?php } ?>
-            </tbody>
         </table>
     </div>
 </body>

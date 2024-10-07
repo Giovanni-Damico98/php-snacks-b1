@@ -8,3 +8,15 @@ tr:hover {
   transform: scale(1.02);
   transition: transform 0.2s ease;
 }
+
+input {
+  margin-bottom: 20px !important;
+}
+
+label {
+  margin-bottom: 10px !important;
+}
+
+button {
+  margin-bottom: 20px !important;
+}
